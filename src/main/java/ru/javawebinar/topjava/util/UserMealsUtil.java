@@ -33,25 +33,10 @@ public class UserMealsUtil {
         System.out.println(filteredByStreams(meals, LocalTime.of(7, 0), LocalTime.of(12, 0), 2000));
     }
 
-    public static List<UserMealWithExcess> filteredByCycles(List<UserMeal> meals, LocalTime startTime, LocalTime endTime, int caloriesPerDay) {
-        // TODO return filtered list with excess. Implement by cycles
-        Map<Integer, BooleanMealHolder > mealForDay = new HashMap<>();
-        List<UserMealWithExcess> listMeals = new ArrayList<>();
-        BooleanMealHolder booleanMealHolder;
-        for (UserMeal um : meals) {
-            setMealsForDAy(um, mealForDay, caloriesPerDay);
-            booleanMealHolder =mealForDay.get(um.getDateTime().getDayOfMonth());
-            if (TimeUtil.isBetweenHalfOpen(getLocalTime(um), startTime, endTime)){
-                listMeals.add(new UserMealWithExcess(um, booleanMealHolder ));
-            }
-        }
-        return listMeals;
-    }
-
     private static void setMealsForDAy(UserMeal um, Map<Integer, BooleanMealHolder> mealForDay, int caloriesPerDay) {
-        if (mealForDay.get(getDayOfMount(um))== null){
+        if (mealForDay.get(getDayOfMount(um)) == null) {
             mealForDay.put(getDayOfMount(um), new BooleanMealHolder(um.getCalories(), caloriesPerDay));
-        }else {
+        } else {
             mealForDay.get(getDayOfMount(um)).setCalories(um.getCalories());
         }
 
@@ -65,13 +50,29 @@ public class UserMealsUtil {
         return userMeal.getDateTime().getDayOfMonth();
     }
 
+    public static List<UserMealWithExcess> filteredByCycles(List<UserMeal> meals, LocalTime startTime, LocalTime endTime, int caloriesPerDay) {
+        // TODO return filtered list with excess. Implement by cycles
+        Map<Integer, BooleanMealHolder> mealForDay = new HashMap<>();
+        List<UserMealWithExcess> listMeals = new ArrayList<>();
+        BooleanMealHolder booleanMealHolder;
+        for (UserMeal um : meals) {
+            setMealsForDAy(um, mealForDay, caloriesPerDay);
+            booleanMealHolder = mealForDay.get(um.getDateTime().getDayOfMonth());
+            if (TimeUtil.isBetweenHalfOpen(getLocalTime(um), startTime, endTime)) {
+                listMeals.add(new UserMealWithExcess(um, booleanMealHolder));
+            }
+        }
+        return listMeals;
+    }
+
+
     public static List<UserMealWithExcess> filteredByStreams(List<UserMeal> meals, LocalTime startTime, LocalTime endTime, int caloriesPerDay) {
         // TODO Implement by streams
-        Map<Integer, BooleanMealHolder > mealForDay = new HashMap<>();
-        return   meals.stream()
-                .peek(um->setMealsForDAy(um,mealForDay,caloriesPerDay))
-                .filter(um->TimeUtil.isBetweenHalfOpen(getLocalTime(um),startTime, endTime))
-                .map(um->new UserMealWithExcess(um, mealForDay.get(um.getDateTime().getDayOfMonth())))
+        Map<Integer, BooleanMealHolder> mealForDay = new HashMap<>();
+        return meals.stream()
+                .peek(um -> setMealsForDAy(um, mealForDay, caloriesPerDay))
+                .filter(um -> TimeUtil.isBetweenHalfOpen(getLocalTime(um), startTime, endTime))
+                .map(um -> new UserMealWithExcess(um, mealForDay.get(um.getDateTime().getDayOfMonth())))
                 .collect(Collectors.toList());
 
 
