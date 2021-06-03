@@ -15,6 +15,7 @@ public class BooleanMealHolder {
         this.calories =this.calories + calories;
         this.excess = getExsces();
 
+
     }
 
     private boolean getExsces() {
