@@ -28,11 +28,9 @@ private Storage storage = new ListStorage();
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        List<Meal> meals = storage.getAllSorted();
-String [] name = new String[] {"Tom", "Bob", "Sam"};
-        request.setAttribute("name", "name" );
-        response.sendRedirect("meals.jsp");
-
+        List<MealTo> meals = MealsUtil.getMealList(storage.getAllSorted());
+        request.setAttribute("meals", meals );
+        request.getRequestDispatcher("/meals.jsp").forward(request, response);
     }
 
     @Override

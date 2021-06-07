@@ -26,7 +26,7 @@
 
 
     <c:forEach var="meal" items="${meals}" >
-<jsp:useBean id="meal" type="ru.javawebinar.topjava.model.Meal"/>
+        <jsp:useBean id="meal" type="ru.javawebinar.topjava.model.MealTo"/>
 
         <tr>
             <td>${meal.dateTime}</td>
