@@ -7,18 +7,20 @@ import java.time.LocalTime;
 import java.util.UUID;
 
 public class Meal implements Serializable {
-    private static final long seriafVersionUid;
-
-    static {
-        seriafVersionUid = 1l;
-    }
+    private static final long serialVersionUID = 2041275512219239990L;
 
     private final String uuid;
-    private final LocalDateTime dateTime;
+    private  LocalDateTime dateTime;
 
-    private final String description;
+    private  String description;
 
-    private final int calories;
+    private  int calories;
+
+    public Meal() {
+        this.uuid = UUID.randomUUID().toString();
+        this.description ="";
+        this.calories =0;
+    }
 
     public Meal(LocalDateTime dateTime, String description, int calories) {
         this.uuid = UUID.randomUUID().toString();
