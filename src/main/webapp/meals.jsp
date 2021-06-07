@@ -13,7 +13,8 @@
     <title>Meals</title>
 </head>
 <body>
-<h3><a href="index.html" name="Home">Hame</a> </h3>
+<h3><a href="index.html" name="Home">Home</a> </h3>
+<h3><a href="create.jsp" >addMeal</a>  </h3>
 <table border="1">
     <tr>
         <th>Date</th>
@@ -24,8 +25,11 @@
     </tr>
     <c:forEach var="meal" items="${meals}">
         <jsp:useBean id="meal" type="ru.javawebinar.topjava.model.MealTo"/>
-        <tr>
-            <td>&{mea} </td>
+        <tr style=" ${meal.excess? "color: crimson" : "color: green" }" >
+            <td>"${meal.dateTime}"</td>
+            <td>"${meal.description}"</td>
+            <td>"${meal.calories}"</td>
+            <td><a href="create.jsp"  name="edit" >edit</a> </td>
         </tr>
     </c:forEach>
 </table>

@@ -20,6 +20,9 @@ public class Meal {
         this.calories = calories;
     }
 
+    public Meal() {
+        this.uuid = UUID.randomUUID().toString();
+    }
 
     public String getUuid() {
         return uuid;
