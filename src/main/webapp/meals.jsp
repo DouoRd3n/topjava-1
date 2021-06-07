@@ -5,7 +5,7 @@
   Time: 16:43
   To change this template use File | Settings | File Templates.
 --%>
-
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <head>
@@ -22,7 +22,12 @@
         <th></th>
         <th></th>
     </tr>
-    <c:for
+    <c:forEach var="meal" items="${meals}">
+        <jsp:useBean id="meal" type="ru.javawebinar.topjava.model.MealTo"/>
+        <tr>
+            <td>&{mea} </td>
+        </tr>
+    </c:forEach>
 </table>
 </body>
 </html>
