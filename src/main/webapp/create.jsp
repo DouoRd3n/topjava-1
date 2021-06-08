@@ -1,11 +1,4 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<%--
-  Created by IntelliJ IDEA.
-  User: Serg
-  Date: 07.06.2021
-  Time: 17:20
-  To change this template use File | Settings | File Templates.
---%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <head>
@@ -18,7 +11,7 @@
 <h3><a href="index.html">home</a>  </h3>
 <hr>
 <h2>Edit Meal</h2>
-<form method="post">
+<form method="post" action="meals" >
 
     <input type="hidden" name="uuid" value="${meal.uuid}">
 
@@ -33,7 +26,7 @@
     </dl>
 
     <p>
-        <button type="submit">Отправить</button>
+        <button type="submit">Отправить</button>  <button onclick="window.history.forward()">cancel</button>
     </p>
 </form>
 
