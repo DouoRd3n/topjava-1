@@ -1,5 +1,6 @@
 package ru.javawebinar.topjava.web;
 
+import org.slf4j.Logger;
 import ru.javawebinar.topjava.model.Meal;
 import ru.javawebinar.topjava.model.MealTo;
 import ru.javawebinar.topjava.storage.ListStorage;
@@ -12,22 +13,29 @@ import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.util.List;
 
-public class mealServlet extends HttpServlet {
+import static org.slf4j.LoggerFactory.getLogger;
+
+public class MealServlet extends HttpServlet {
+    private static final Logger log = getLogger(MealServlet.class);
     private Storage storage;
+
 
     @Override
     public void init(ServletConfig config) throws ServletException {
+        log.info("init mealsServlet");
         super.init(config);
         this.storage = new ListStorage();
     }
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+
         List<MealTo> meals = storage.getAllMeals();
         String uuid = request.getParameter("uuid");
         String action = request.getParameter("action");
         Meal meal;
         if (action == null) {
+            log.info("forvard meals.jsp");
             request.setAttribute("meals", meals);
             request.getRequestDispatcher("/meals.jsp").forward(request, response);
             return;
@@ -35,10 +43,12 @@ public class mealServlet extends HttpServlet {
 
         switch (action) {
             case "remove":
+                log.info("delete meal " + uuid);
                 storage.delete(uuid);
                 response.sendRedirect("meals");
                 return;
             case "edit":
+
             case "update":
                 meal = storage.get(uuid);
                 request.setAttribute("meal", meal);
@@ -54,11 +64,13 @@ public class mealServlet extends HttpServlet {
         Meal meal;
         String date = request.getParameter("date");
         if (uuid != null && uuid.trim().length() != 0) {
+            log.info("update meal " + uuid);
             meal = storage.get(uuid);
             storage.update(getMeal(date, meal, request));
             response.sendRedirect("meals");
             return;
         } else {
+            log.info("save new meal");
             storage.save(getMeal(date, new Meal(), request));
         }
         response.sendRedirect("meals");
