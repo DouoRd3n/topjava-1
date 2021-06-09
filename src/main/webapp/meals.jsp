@@ -27,7 +27,7 @@
     <c:forEach var="meal" items="${meals}">
         <jsp:useBean id="meal" type="ru.javawebinar.topjava.model.MealTo"/>
         <tr style=" ${meal.excess? "color: crimson" : "color: green" }" >
-            <td>"${meal.dateTime}"</td>
+            <td>"${meal.dateTime.toString().replace("T", " ")}"</td>
             <td>"${meal.description}"</td>
             <td>"${meal.calories}"</td>
             <td><a href="meals?uuid=${meal.uuid}&action=remove">delete</a> </td>

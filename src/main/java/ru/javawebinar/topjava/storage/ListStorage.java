@@ -52,6 +52,7 @@ public class ListStorage implements Storage {
     @Override
     public void update(Meal m) {
         for (int i = 0; i < meals.size(); i++) {
+
             if (meals.get(i).getUuid().equals(m.getUuid())) {
                 meals.remove(i);
                 meals.add(m);

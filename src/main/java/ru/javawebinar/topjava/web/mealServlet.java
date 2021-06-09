@@ -27,73 +27,48 @@ public class mealServlet extends HttpServlet {
         String uuid = request.getParameter("uuid");
         String action = request.getParameter("action");
         Meal meal;
-        if (action == null){
+        if (action == null) {
             request.setAttribute("meals", meals);
             request.getRequestDispatcher("/meals.jsp").forward(request, response);
             return;
         }
 
-        switch (action){
+        switch (action) {
             case "remove":
                 storage.delete(uuid);
                 response.sendRedirect("meals");
                 return;
             case "edit":
+            case "update":
                 meal = storage.get(uuid);
                 request.setAttribute("meal", meal);
                 break;
-            case "update":
-
-                break;
-
         }
-//        if (action != null){
-//            if(action.equalsIgnoreCase("delete")){
-//                String uuid= request.getParameter("uuid");
-//                storage.delete(uuid);
-//
-//                request.setAttribute("meals", meals);
-//                request.getRequestDispatcher("/meals.jsp").forward(request, response);
-//            } else if (action.equalsIgnoreCase("edit")){
-//                forward = "/create.jsp";
-//
-//            } else if (action.equalsIgnoreCase("meals")){
-//                request.setAttribute("meals", meals);
-//
-//            }
-//        }
-
-//
-//        request.getRequestDispatcher(forward).forward(request, response);
-
-
-        request.setAttribute("meals", meals);
-        request.getRequestDispatcher(action.equals("edit")?"create.jsp":"meals.jsp").forward(request, response);
-}
+        request.getRequestDispatcher(action.equals("edit") ? "create.jsp" : "meals.jsp").forward(request, response);
+    }
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         request.setCharacterEncoding("utf-8");
         String uuid = request.getParameter("uuid");
-        Meal meal = new Meal();
+        Meal meal;
         String date = request.getParameter("date");
-        if (uuid!=null && uuid.trim().length()!=0){
+        if (uuid != null && uuid.trim().length() != 0) {
             meal = storage.get(uuid);
-            LocalDateTime localDateTime = LocalDateTime.parse(date);
-            meal.setDateTime(localDateTime);
-            meal.setDescription(request.getParameter("description"));
-            meal.setCalories(Integer.parseInt(request.getParameter("calories")));
-            storage.update(meal);
+            storage.update(getMeal(date, meal, request));
             response.sendRedirect("meals");
             return;
-        }else {
-            LocalDateTime localDateTime = LocalDateTime.parse(date);
-            meal.setDateTime(localDateTime);
-            meal.setDescription(request.getParameter("description"));
-            meal.setCalories(Integer.parseInt(request.getParameter("calories")));
+        } else {
+            storage.save(getMeal(date, new Meal(), request));
+        }
+        response.sendRedirect("meals");
+    }
 
-
-            storage.save(meal);
-        } response.sendRedirect("meals");
+    private Meal getMeal(String date, Meal meal, HttpServletRequest request) {
+        LocalDateTime localDateTime = LocalDateTime.parse(date);
+        meal.setDateTime(localDateTime);
+        meal.setDescription(request.getParameter("description"));
+        meal.setCalories(Integer.parseInt(request.getParameter("calories")));
+        return meal;
     }
 }
