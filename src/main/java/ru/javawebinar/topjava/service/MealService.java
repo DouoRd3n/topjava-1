@@ -44,4 +44,7 @@ public class MealService {
 
 
     }
+    public Meal update(Meal meal){
+      return  checkNotFoundWithId(repository.save(meal, SecurityUtil.authUserId()), meal.getId());
+    }
 }
