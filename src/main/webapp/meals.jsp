@@ -21,6 +21,13 @@
     <h3><a href="index.html">Home</a></h3>
     <hr/>
     <h2>Meals</h2>
+    <form>
+        <dl>
+            <dt>DateTime:</dt>
+            <dd><input type="date" value="${meal.dateTime}" name="dateTime" required></dd>
+        </dl>
+
+    </form>
     <a href="meals?action=create">Add Meal</a>
     <br><br>
     <table border="1" cellpadding="8" cellspacing="0">
