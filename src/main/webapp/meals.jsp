@@ -21,12 +21,32 @@
     <h3><a href="index.html">Home</a></h3>
     <hr/>
     <h2>Meals</h2>
-    <form>
-        <dl>
-            <dt>DateTime:</dt>
-            <dd><input type="date" value="${meal.dateTime}" name="dateTime" required></dd>
-        </dl>
+    <form method="post" action="meals">
+        <table>
 
+            <dl>
+                <dt>start date:</dt>
+                <dd><input type="date" value="startDate" name="startDate" autocomplete="off"></dd>
+            </dl>
+            <dl>
+                <dt>end date:</dt>
+                <dd><input type="date" value="endDate" name="endDate" autocomplete="off"></dd>
+            </dl>
+            <dl>
+                <dt>start time:</dt>
+                <dd><input type="time" value="startTime" name="startTime" autocomplete="off"></dd>
+            </dl>
+            <dl>
+                <dt>end time:</dt>
+                <dd><input type="time" value="endTime" name="endTime" autocomplete="off"></dd>
+            </dl>
+
+
+            </tr>
+
+
+        </table>
+        <button type="submit">filter</button>
     </form>
     <a href="meals?action=create">Add Meal</a>
     <br><br>
