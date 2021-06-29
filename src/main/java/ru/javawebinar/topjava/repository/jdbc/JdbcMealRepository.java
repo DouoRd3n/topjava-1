@@ -9,14 +9,13 @@ import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 import org.springframework.stereotype.Repository;
 import ru.javawebinar.topjava.model.Meal;
-import ru.javawebinar.topjava.model.User;
 import ru.javawebinar.topjava.repository.MealRepository;
+import ru.javawebinar.topjava.util.Util;
 
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.Date;
 import java.util.List;
-import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
 @Repository
@@ -44,7 +43,7 @@ public class JdbcMealRepository implements MealRepository {
         MapSqlParameterSource map = new MapSqlParameterSource()
                 .addValue("id", meal.getId())
                 .addValue("user_id", userId)
-                .addValue("datetime", Date.from(meal.getDateTime().atZone(ZoneId.systemDefault()).toInstant()))
+                .addValue("datetime", meal.getDateTime())
                 .addValue("description", meal.getDescription())
                 .addValue("calories", meal.getCalories());
         if (meal.isNew()) {
@@ -77,14 +76,19 @@ public class JdbcMealRepository implements MealRepository {
     public List<Meal> getAll(int userId) {
 
 
-        List<Meal> query = jdbcTemplate.query("SELECT id , datetime, description, calories FROM meals WHERE user_id =?", ROW_MAPPER, userId);
-        jdbcTemplate.
+jdbcTemplate.query("SELECT id , datetime, description, calories FROM meals WHERE user_id =?", ROW_MAPPER, userId);
 
-        return query;
+
+        return jdbcTemplate.query("SELECT id , datetime, description, calories FROM meals WHERE user_id =?", ROW_MAPPER, userId).stream()
+                .sorted((m1,m2)->m2.getDateTime().compareTo(m1.getDateTime()))
+                .collect(Collectors.toList());
     }
 
     @Override
     public List<Meal> getBetweenHalfOpen(LocalDateTime startDateTime, LocalDateTime endDateTime, int userId) {
-        return null;
+
+        return getAll(userId).stream()
+                .filter(m-> Util.isBetweenHalfOpen(m,startDateTime,endDateTime))
+                .collect(Collectors.toList());
     }
 }

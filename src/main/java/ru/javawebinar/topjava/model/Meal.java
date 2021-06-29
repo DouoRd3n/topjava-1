@@ -1,9 +1,9 @@
 package ru.javawebinar.topjava.model;
 
-import ru.javawebinar.topjava.util.DateTimeUtil;
-
-import java.time.*;
-import java.time.format.DateTimeFormatter;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.time.ZoneId;
 import java.util.Date;
 
 public class Meal extends AbstractBaseEntity {
@@ -28,9 +28,9 @@ public class Meal extends AbstractBaseEntity {
         this.calories = calories;
     }
 
-    public void setDateTime(Date dateTime) {
+    public void setDateTime(LocalDateTime dateTime) {
 
-     this.dateTime = dateTime.toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime();
+     this.dateTime = dateTime;
     }
 
     public void setDescription(String description) {
