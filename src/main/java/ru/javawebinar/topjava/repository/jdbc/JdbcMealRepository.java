@@ -13,6 +13,8 @@ import ru.javawebinar.topjava.model.User;
 import ru.javawebinar.topjava.repository.MealRepository;
 
 import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.util.Date;
 import java.util.List;
 import java.util.stream.Collector;
 import java.util.stream.Collectors;
@@ -42,7 +44,7 @@ public class JdbcMealRepository implements MealRepository {
         MapSqlParameterSource map = new MapSqlParameterSource()
                 .addValue("id", meal.getId())
                 .addValue("user_id", userId)
-                .addValue("datetime", meal.getDateTime().toString().replace("T"," "))
+                .addValue("datetime", Date.from(meal.getDateTime().atZone(ZoneId.systemDefault()).toInstant()))
                 .addValue("description", meal.getDescription())
                 .addValue("calories", meal.getCalories());
         if (meal.isNew()) {
@@ -76,6 +78,7 @@ public class JdbcMealRepository implements MealRepository {
 
 
         List<Meal> query = jdbcTemplate.query("SELECT id , datetime, description, calories FROM meals WHERE user_id =?", ROW_MAPPER, userId);
+        jdbcTemplate.
 
         return query;
     }

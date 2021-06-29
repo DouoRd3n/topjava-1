@@ -28,9 +28,9 @@ public class Meal extends AbstractBaseEntity {
         this.calories = calories;
     }
 
-    public void setDateTime(String dateTime) {
+    public void setDateTime(Date dateTime) {
 
-     this.dateTime = DateTimeUtil.parseLocalDateTime(dateTime);;
+     this.dateTime = dateTime.toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime();
     }
 
     public void setDescription(String description) {

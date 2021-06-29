@@ -16,7 +16,7 @@ public class MainRepo {
         JdbcUserRepository userRepo = appcTx.getBean(JdbcUserRepository.class);
         bean.save(new Meal(LocalDateTime.of(2015, Month.JUNE, 1, 14, 0), "Админ ланч", 510), 100001);
         bean.save(new Meal(LocalDateTime.of(2015, Month.JUNE, 1, 21, 0), "Админ ужин", 1500), 100001);
-        Meal meal = bean.get(100078, 100001);
+        Meal meal = bean.get(100088, 100001);
 
         List<User> all = userRepo.getAll();
         System.out.println(meal.toString());
