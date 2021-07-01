@@ -30,8 +30,9 @@ import static ru.javawebinar.topjava.UserTestData.*;
 @RunWith(SpringRunner.class)
 @Sql(scripts = "classpath:db/populateDB.sql", config = @SqlConfig(encoding = "UTF-8"))
 public class MealServiceTest {
- @Autowired
- private MealService service;
+    @Autowired
+    private MealService service;
+
     static {
 
         SLF4JBridgeHandler.install();
@@ -39,50 +40,66 @@ public class MealServiceTest {
 
     @Test
     public void get() {
-       assertEquals(service.get(99999,ADMIN_ID), MEAL1);
+        assertEquals(service.get(99999, ADMIN_ID), MEAL1);
     }
+
     @Test
-    public void getNotFound(){
-       assertThrows(NotFoundException.class, ()->service.get(NOT_FOUND, USER_ID));
+    public void getForNotUserId() {
+        assertThrows(NotFoundException.class, () -> service.get(MEAL10.getId(), ADMIN_ID));
     }
+
     @Test
-    public void deleteNotFound(){
-       assertThrows(NotFoundException.class, ()->service.delete(NOT_FOUND, USER_ID ));
+    public void deleteForNotUserId() {
+        assertThrows(NotFoundException.class, () -> service.delete(MEAL10.getId(), ADMIN_ID));
+    }
+
+    @Test
+    public void getNotFound() {
+        assertThrows(NotFoundException.class, () -> service.get(NOT_FOUND, USER_ID));
+    }
+
+    @Test
+    public void deleteNotFound() {
+        assertThrows(NotFoundException.class, () -> service.delete(NOT_FOUND, USER_ID));
     }
 
     @Test
     public void delete() {
-       service.delete(MEAL10.getId(), USER_ID );
-       assertThrows(NotFoundException.class, ()->service.get(MEAL10.getId(), USER_ID));
+        service.delete(MEAL10.getId(), USER_ID);
+        assertThrows(NotFoundException.class, () -> service.get(MEAL10.getId(), USER_ID));
     }
 
     @Test
     public void getBetweenInclusive() {
-       List<Meal> betweenInclusive = service.getBetweenInclusive(LocalDate.of(2015, 6, 01), LocalDate.of(2015, 6, 01), ADMIN_ID);
-       assertEquals(betweenInclusive, Arrays.asList(MEAL1,MEAL2) );
-       assertEquals(betweenInclusive.size(), 2);
+        List<Meal> betweenInclusive = service.getBetweenInclusive(LocalDate.of(2015, 6, 01), LocalDate.of(2015, 6, 01), ADMIN_ID);
+        assertEquals(betweenInclusive, Arrays.asList(MEAL1, MEAL2));
+        assertEquals(betweenInclusive.size(), 2);
     }
 
     @Test
     public void getAll() {
-       assertEquals(service.getAll(ADMIN_ID), Arrays.asList(MEAL1, MEAL2));
-       assertEquals(service.getAll(ADMIN_ID).size(), 2);
+        assertEquals(service.getAll(ADMIN_ID), Arrays.asList(MEAL1, MEAL2));
+        assertEquals(service.getAll(ADMIN_ID).size(), 2);
     }
 
     @Test
     public void update() {
-       service.update(UPDATEMEAL, USER_ID );
-       assertEquals(service.get(UPDATEMEAL.getId(), USER_ID), UPDATEMEAL);
+        service.update(UPDATEMEAL, USER_ID);
+        assertEquals(service.get(UPDATEMEAL.getId(), USER_ID), UPDATEMEAL);
+    }
+
+    @Test
+    public void updateForNotUserId() {
+        assertThrows(NotFoundException.class, () -> service.update(UPDATEMEAL, ADMIN_ID));
     }
 
     @Test
     public void create() {
-      Meal created = service.create(NEWMEAL, ADMIN_ID);
-       Integer id = created.getId();
-       Meal newMeal = NEWMEAL;
-       assertEquals(created, newMeal);
-       assertEquals(service.get(id, ADMIN_ID), newMeal);
-
+        Meal created = service.create(NEWMEAL, ADMIN_ID);
+        Integer id = created.getId();
+        Meal newMeal = NEWMEAL;
+        assertEquals(created, newMeal);
+        assertEquals(service.get(id, ADMIN_ID), newMeal);
 
 
     }
