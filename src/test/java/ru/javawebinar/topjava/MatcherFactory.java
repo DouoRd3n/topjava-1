@@ -16,6 +16,8 @@ public class MatcherFactory<T> {
         this.fieldsToIgnore = fieldsToIgnore;
     }
 
+
+
     public static <T> MatcherFactory<T> usingIgnoringFieldsComparator(String... fieldsToIgnore) {
         return new MatcherFactory<>(fieldsToIgnore);
     }
@@ -32,4 +34,6 @@ public class MatcherFactory<T> {
     public void assertMatch(Iterable<T> actual, Iterable<T> expected) {
         assertThat(actual).usingElementComparatorIgnoringFields(fieldsToIgnore).isEqualTo(expected);
     }
+
+
 }
