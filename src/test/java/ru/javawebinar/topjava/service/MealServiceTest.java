@@ -1,6 +1,10 @@
 package ru.javawebinar.topjava.service;
 
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.ExpectedException;
+import org.junit.rules.Stopwatch;
+import org.junit.runner.Description;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
@@ -13,6 +17,7 @@ import ru.javawebinar.topjava.util.exception.NotFoundException;
 
 import java.time.LocalDate;
 import java.time.Month;
+import java.util.logging.Logger;
 
 import static org.junit.Assert.assertThrows;
 import static ru.javawebinar.topjava.MealTestData.*;
@@ -29,6 +34,15 @@ public class MealServiceTest {
 
     @Autowired
     private MealService service;
+    @Rule
+    public final ExpectedException thrown = ExpectedException.none();
+
+    @Test
+    public void throwsNullPointerException() {
+        thrown.expect(NullPointerException.class);
+
+        throw new NullPointerException();
+    }
 
     @Test
     public void delete() {
