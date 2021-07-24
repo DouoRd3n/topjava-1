@@ -20,7 +20,7 @@ import java.util.Objects;
 
 import static ru.javawebinar.topjava.util.DateTimeUtil.parseLocalDate;
 import static ru.javawebinar.topjava.util.DateTimeUtil.parseLocalTime;
-@Profile("jdbc")
+
 public class MealServlet extends HttpServlet {
 
     private ClassPathXmlApplicationContext springContext;
@@ -28,7 +28,6 @@ public class MealServlet extends HttpServlet {
 
 
     @Override
-
     public void init() {
         springContext = new ClassPathXmlApplicationContext(new String[]{"spring/spring-db.xml", "spring/spring-app.xml"}, false);
         springContext.getEnvironment().setActiveProfiles(Profiles.getActiveDbProfile(), Profiles.REPOSITORY_IMPLEMENTATION);
