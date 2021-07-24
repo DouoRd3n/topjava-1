@@ -52,6 +52,8 @@ public class AbstractMealServiceTest {
         }
     };
 
+
+
     @Autowired
     private MealService service;
 
