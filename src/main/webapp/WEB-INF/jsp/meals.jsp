@@ -5,7 +5,8 @@
 <html>
 <head>
     <title>Meals</title>
-    <link rel="stylesheet" href="css/style.css">
+<base HREF="http://localhost:8082/topjava/">
+    <link rel="stylesheet" href="resources/css/style.css">
 </head>
 <body>
 <section>
@@ -56,8 +57,8 @@
                 </td>
                 <td>${meal.description}</td>
                 <td>${meal.calories}</td>
-                <td><a href="meals?action=update&id=${meal.id}">Update</a></td>
-                <td><a href="meals?action=delete&id=${meal.id}">Delete</a></td>
+                <td><a href="meals/update?id=${meal.id}">Update</a></td>
+                <td><a href="meals/delete?id=${meal.id}">Delete</a></td>
             </tr>
         </c:forEach>
     </table>
