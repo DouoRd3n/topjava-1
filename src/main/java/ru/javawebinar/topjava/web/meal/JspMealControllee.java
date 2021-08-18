@@ -56,7 +56,7 @@ class JspMealController extends AbstractMealController {
         } else {
             super.update(meal, getId(request));
         }
-        return "redirect:meals";
+        return "redirect:/meals";
     }
 
     @GetMapping("/filter")
