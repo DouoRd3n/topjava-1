@@ -5,16 +5,13 @@ import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.CacheManager;
 import org.springframework.dao.DataAccessException;
-import ru.javawebinar.topjava.UserTestData;
 import ru.javawebinar.topjava.model.Role;
 import ru.javawebinar.topjava.model.User;
 import ru.javawebinar.topjava.repository.JpaUtil;
 import ru.javawebinar.topjava.util.exception.NotFoundException;
 
 import javax.validation.ConstraintViolationException;
-import java.util.Date;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 import static org.junit.Assert.assertThrows;
 import static ru.javawebinar.topjava.UserTestData.*;
@@ -41,8 +38,10 @@ public abstract class AbstractUserServiceTest extends AbstractServiceTest {
         User created = service.create(getNew());
         int newId = created.id();
         User newUser = getNew();
+        Set<Role> role = Collections.singleton(Role.USER);
         newUser.setId(newId);
-        MATCHER.assertMatch(created, newUser);
+        created.setRoles(role);
+        MATCHER.assertMatch(newUser, created);
         MATCHER.assertMatch(service.get(newId), newUser);
     }
 
