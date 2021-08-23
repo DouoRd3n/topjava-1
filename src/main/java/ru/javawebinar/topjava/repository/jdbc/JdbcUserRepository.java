@@ -9,17 +9,21 @@ import org.springframework.jdbc.core.namedparam.BeanPropertySqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 import ru.javawebinar.topjava.model.Role;
 import ru.javawebinar.topjava.model.User;
 import ru.javawebinar.topjava.repository.UserRepository;
+import ru.javawebinar.topjava.util.ValidationUtil;
 
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.*;
 import java.util.function.Consumer;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 @Repository
+@Transactional(readOnly = true)
 public class JdbcUserRepository implements UserRepository {
 
     private static final BeanPropertyRowMapper<User> ROW_MAPPER = BeanPropertyRowMapper.newInstance(User.class);
@@ -42,7 +46,10 @@ public class JdbcUserRepository implements UserRepository {
     }
 
     @Override
+    @Transactional
     public User save(User user) {
+        ValidationUtil.validate(user);
+
         BeanPropertySqlParameterSource parameterSource = new BeanPropertySqlParameterSource(user);
 
         if (user.isNew()) {
@@ -61,6 +68,7 @@ public class JdbcUserRepository implements UserRepository {
     }
 
     @Override
+    @Transactional
     public boolean delete(int id) {
         return jdbcTemplate.update("DELETE FROM users WHERE id=?", id) != 0;
     }
@@ -87,34 +95,14 @@ public class JdbcUserRepository implements UserRepository {
     public List<User> getAll() {
         List<User> users = jdbcTemplate.query("SELECT * FROM users ORDER BY name, email", ROW_MAPPER);
 
-        class Role{
-            private Integer UserId;
-            private Role role;
-            public Role() {
 
-            }
-
-            public Role(Integer userId, Role role) {
-                UserId = userId;
-                this.role = role;
-            }
-
-
-            public Integer getUserId() {
-                return UserId;
-            }
-
-            public Role getRole() {
-                return role;
-            }
-
-        }
+        Map<Integer, Set<Role>> map = new HashMap<>();
+      jdbcTemplate.query("SELECT*FROM user_roles ", rs->{
+          map.computeIfAbsent(rs.getInt("user_id"), userId->EnumSet.noneOf(Role.class))
+                  .add(Role.valueOf(rs.getString("role")));
+      });
       users.stream()
-              .forEach(user -> {
-                 user.setRoles(jdbcTemplate.query("SELECT*FROM user_roles WHERE user_id=?", ROW_MAPPER_ROLE, user.getId()).stream()
-                         .collect(Collectors.toSet()));
-              });
-
+              .forEach(u->u.setRoles(map.get(u.getId())));
 
  return users;
 
